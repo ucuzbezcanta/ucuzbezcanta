@@ -10,6 +10,12 @@ images: {
         port: '1337',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https', // Canlıda HTTPS kullanıyoruz
+        hostname: 'ucuzbezcanta.onrender.com', // Strapi'nizin ana host adı
+        port: '', // Varsayılan HTTPS portu olduğu için boş bırakabiliriz
+        pathname: '/uploads/**', // Strapi'nin görselleri /uploads altında sunulur
+      },
    
     ],
   },
