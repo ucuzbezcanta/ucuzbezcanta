@@ -102,13 +102,13 @@ export default function HeroSection({ slides }: HeroSectionProps) {
                   sizes="(max-width: 768px) 100vw, 100vw"
                 />
                 {/* Overlay (Görselin okunurluğunu artırmak için) */}
-                <div className="absolute inset-0 bg-black opacity-40"></div>
+                <div className="absolute inset-0 bg-black opacity-20"></div>
               </motion.div>
             )}
 
             {/* İçerik */}
             <motion.div
-              className="relative z-10 text-white text-center p-4 max-w-3xl mx-auto"
+              className="relative z-10 text-white text-left p-4 max-w-3xl mx-auto"
               variants={textContainerVariants}
               initial="hidden"
               animate="visible"

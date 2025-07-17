@@ -43,10 +43,10 @@ export default function Footer() {
         <div>
           <h4 className="font-semibold text-gray-800 mb-3">Yardım</h4>
           <ul className="space-y-2">
-            <li><Link href="/faq" className="hover:text-blue-600">Sıkça Sorulan Sorular</Link></li>
-            <li><Link href="/shipping" className="hover:text-blue-600">Teslimat</Link></li>
-            <li><Link href="/returns" className="hover:text-blue-600">İade Politikası</Link></li>
-            <li><Link href="/terms" className="hover:text-blue-600">Kullanım Koşulları</Link></li>
+            <li><Link href="/sss" className="hover:text-blue-600">Sıkça Sorulan Sorular</Link></li>
+            
+            <li><Link href="/iade" className="hover:text-blue-600">İade Politikası</Link></li>
+           
           </ul>
         </div>
 
@@ -64,9 +64,9 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-20 py-6 max-w-screen-xl mx-auto">
         {/* Sosyal */}
         <div className="flex space-x-4 mb-4 md:mb-0">
-          <a href="#" className="text-gray-500 hover:text-blue-600"><FaFacebookF size={20} /></a>
-          <a href="#" className="text-gray-500 hover:text-blue-600"><FaTwitter size={20} /></a>
-          <a href="#" className="text-gray-500 hover:text-blue-600"><FaInstagram size={20} /></a>
+          <a href="https://www.facebook.com/ucuzbezcanta" className="text-gray-500 hover:text-blue-600"><FaFacebookF size={20} /></a>
+          <a href="https://www.x.com/ubcucuzbezcanta" className="text-gray-500 hover:text-blue-600"><FaTwitter size={20} /></a>
+          <a href="https://www.instagram.com/ucuzbezcanta" className="text-gray-500 hover:text-blue-600"><FaInstagram size={20} /></a>
           <span className="sm:text-base text-[10px] text-qgray font-300">©2025
             <a href="#" rel="noreferrer" className="font-500 text-qblack mx-1">Tek Tanıtım Reklam</a>All rights reserved</span>
         </div>

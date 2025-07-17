@@ -5,6 +5,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
+import Image from 'next/image';
 
 interface Category {
   id: number;
@@ -125,7 +126,13 @@ return (
     <header className="bg-gradient-to-r from-[#323d42] to-[#3f778c] text-white p-4 shadow-xl relative z-20"> {/* relative ve z-index */}
       <nav className="container mx-auto flex justify-between items-center h-10"> {/* h-10 eklendi */}
         <Link href="/" className="text-3xl font-extrabold tracking-tight">
-          MySite
+          <Image
+              src="/images/logo_white.png"
+              alt="Logo"
+              width={150}
+              height={50}
+              priority
+          />
         </Link>
 
         {/* Desktop Menü ve Arama */}
