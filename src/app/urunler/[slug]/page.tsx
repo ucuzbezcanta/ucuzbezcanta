@@ -1,30 +1,45 @@
 // app/urunler/[slug]/page.tsx
 
-import { fetchProducts, fetchProductBySlug } from '@/app/lib/strapi';
+import { fetchProducts, fetchProductBySlug } from '@/app/lib/supabase';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
+// BlocksRenderer artık kullanılmayacak, import'unu kaldırıyoruz
+// import { BlocksRenderer } from '@strapi/blocks-react-renderer';
 import ProductGallery from '@/components/ProductGallery';
+// import Image from 'next/image'; // 'Image' kullanılmadığı için bu import'u kaldırabiliriz
 
 // generateStaticParams: Tüm ürün slug'ları için statik yollar oluşturur
+// Bu fonksiyon, build zamanında hangi ürün detay sayfalarının oluşturulacağını belirler.
 export async function generateStaticParams() {
   const products = await fetchProducts();
-  return products.map((product) => ({
+  // Eğer ürünler çekilemezse veya boş gelirse boş bir dizi döndürerek hatayı önleriz
+  if (!products) {
+    console.error("generateStaticParams: Ürünler çekilemedi.");
+    return [];
+  }
+  // Her ürünün slug'ını döneriz
+  return products.map((product: { slug: string }) => ({
     slug: product.slug,
   }));
 }
 
-// Props tipini hala any olarak bırakıyoruz ki build sorunları yaşamayalım
-export default async function ProductDetailPage(props: any) {
-  const { slug } = props.params;
+// ProductDetailPage: Dinamik bir rota için Server Component
+// params'ı direkt olarak any olarak tanımlayarak tip uyarısını bastırıyoruz.
+// Bu en basit ve direkt çözümdür, ancak tip güvenliğini azaltır.
+export default async function ProductDetailPage({ params }: any) {
+  // URL'den gelen slug parametresini alıyoruz
+  const { slug } = params;
+
+  // Supabase'den ürün detaylarını çekiyoruz
   const product = await fetchProductBySlug(slug);
 
+  // Eğer ürün bulunamazsa Next.js'in 404 sayfasını gösteriyoruz
   if (!product) {
     notFound();
   }
 
-  // Eğer WhatsApp butonu için telefon numarası varsa buraya ekleyin
-  const whatsappPhoneNumber = '905551234567'; // Örnek numara, gerçek numaranızı buraya yazın
+  // WhatsApp butonu için telefon numarası ve mesajı belirliyoruz
+  const whatsappPhoneNumber = '905339780835'; // Kendi gerçek numaranızı buraya yazın
   const whatsappMessage = encodeURIComponent(`Merhaba, "${product.name}" ürünü hakkında bilgi almak istiyorum.`);
   const whatsappLink = `https://wa.me/${whatsappPhoneNumber}?text=${whatsappMessage}`;
 
@@ -39,23 +54,26 @@ export default async function ProductDetailPage(props: any) {
             </Link>
             <svg className="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg>
           </li>
-          <li className="flex items-center">
-            <Link href={`/kategoriler/${product.categorySlug}`} className="text-indigo-600 hover:text-indigo-800 transition-colors">
-              Kategoriler
-            </Link>
-            <svg className="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.568.001 33.941z"/></svg>
-          </li>
+          {/* Kategori bilgisi varsa breadcrumb'da göster */}
+          {product.categorySlug && product.categoryName && (
+            <li className="flex items-center">
+              <Link href={`/kategoriler/${product.categorySlug}`} className="text-indigo-600 hover:text-indigo-800 transition-colors">
+                {product.categoryName}
+              </Link>
+              <svg className="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.568.001 33.941z"/></svg>
+            </li>
+          )}
           <li className="flex items-center text-gray-700">
             {product.name}
           </li>
         </ol>
       </nav>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-12 items-start"> {/* Ana layout grid'i */}
-        {/* Ürün Galerisi ve Ana Görsel Bölümü - ProductGallery bileşenine taşındı */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-12 items-start">
+        {/* Ürün Galerisi ve Ana Görsel Bölümü */}
         <ProductGallery
-          mainImageUrl={product.mainImageUrl!} // ! işareti ile null/undefined olmayacağını garanti ediyoruz
-          galleryImageUrls={product.galleryImageUrls}
+          mainImageUrl={product.mainImageUrl || ''} // Eğer null/undefined ise boş string gönder
+          galleryImageUrls={product.galleryImageUrls || []} // Eğer null/undefined ise boş dizi gönder
           productName={product.name}
         />
 
@@ -64,12 +82,14 @@ export default async function ProductDetailPage(props: any) {
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
             {product.name}
           </h1>
-          <p className="text-gray-600 text-lg mb-4">
-            Kategori:{' '}
-            <Link href={`/kategoriler/${product.categorySlug}`} className="text-indigo-600 hover:underline">
-              {product.categoryName}
-            </Link>
-          </p>
+          {product.categoryName && ( // Kategori adı varsa göster
+            <p className="text-gray-600 text-lg mb-4">
+              Kategori:{' '}
+              <Link href={`/kategoriler/${product.categorySlug}`} className="text-indigo-600 hover:underline">
+                {product.categoryName}
+              </Link>
+            </p>
+          )}
           <p className="text-4xl font-bold text-indigo-700 mb-6">
             ₺{product.price.toFixed(2)}
           </p>
@@ -79,8 +99,12 @@ export default async function ProductDetailPage(props: any) {
 
           <h3 className="text-2xl font-semibold text-gray-800 mb-4">Ürün Açıklaması</h3>
           <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed mb-8">
-            {product.description && product.description.length > 0 ? (
-                <BlocksRenderer content={product.description as any} />
+            {/* Strapi'nin BlocksRenderer'ı yerine düz metin veya HTML render ediyoruz */}
+            {product.description ? (
+                // Eğer açıklama düz metin ise <p> içinde göster
+                <p>{product.description}</p>
+                // Eğer product.description içinde HTML tagleri varsa, XSS riskini bilerek:
+                // <div dangerouslySetInnerHTML={{ __html: product.description }} />
             ) : (
                 <p>Ürün açıklaması bulunmamaktadır.</p>
             )}

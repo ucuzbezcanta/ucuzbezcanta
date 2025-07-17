@@ -11,6 +11,12 @@ images: {
         pathname: '/uploads/**',
       },
       {
+        protocol: 'https',
+        hostname: 'images.pexels.com', // Pexels görselleri için
+        port: '',
+        pathname: '**', // Bu domaindeki tüm patikaları içer
+      },
+      {
         protocol: 'https', // Canlıda HTTPS kullanıyoruz
         hostname: 'ucuzbezcanta.onrender.com', // Strapi'nizin ana host adı
         port: '', // Varsayılan HTTPS portu olduğu için boş bırakabiliriz

@@ -1,5 +1,5 @@
 
-import { fetchProductsByCategorySlug, fetchCategories } from "@/app/lib/strapi";
+import { fetchProductsByCategorySlug, fetchCategories } from "@/app/lib/supabase";
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';

@@ -1,25 +1,29 @@
 // app/blog/[slug]/page.tsx
 
-import { fetchBlogPostBySlug } from '@/app/lib/strapi';
+import { fetchBlogPosts, fetchBlogPostBySlug } from '@/app/lib/supabase';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { BlocksRenderer } from '@strapi/blocks-react-renderer';
+// BlocksRenderer import'u kaldırıldı
+// import { BlocksRenderer } from '@strapi/blocks-react-renderer'; // Bu satırı SİLİN
 
-// Düzeltildi: PageProps tipi tanımını tamamen kaldırıyoruz.
-// type PageProps<P = object, SP = object> = { ... }; // Bu tanımı SİLİN
-
-// generateStaticParams fonksiyonu aynı kalacak
 export async function generateStaticParams() {
-  return [{ slug: 'ham-bez-cantalarin-gunumuzdeki-onemi' }]; // Örnek slug
+  const posts = await fetchBlogPosts();
+  if (!posts) {
+    console.error("generateStaticParams: Blog yazıları çekilemedi.");
+    return [];
+  }
+  return posts.map((post: { slug: string }) => ({
+    slug: post.slug,
+  }));
 }
 
-export default async function BlogPostDetailPage(props: any) { // Props'u doğrudan 'any' olarak tanımla
-  const { slug } = props.params; // params'a props.params olarak erişiyoruz
+export default async function BlogPostDetailPage({ params }: any) {
+  const { slug } = params;
 
   const post = await fetchBlogPostBySlug(slug);
 
   if (!post) {
-    notFound(); 
+    notFound();
   }
 
   const publishDate = new Date(post.publishedAt).toLocaleDateString('tr-TR', {
@@ -47,13 +51,14 @@ export default async function BlogPostDetailPage(props: any) { // Props'u doğru
         {post.title}
       </h1>
       <p className="text-gray-600 text-lg mb-6">
-        <span className="font-semibold">{post.categoryName}</span> - {publishDate}
+        {/* Kategori adı gösterme kısmı tamamen kaldırıldı */}
+        {publishDate}
       </p>
       <p className="text-xl text-gray-700 mb-8">{post.description}</p>
 
       <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
-        {post.content && post.content.length > 0 ? (
-            <BlocksRenderer content={post.content as any} /> 
+        {post.content ? (
+            <p>{post.content}</p>
         ) : (
             <p>İçerik bulunmamaktadır.</p>
         )}

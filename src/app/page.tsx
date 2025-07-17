@@ -1,25 +1,24 @@
 // app/page.tsx
 
 import HeroSection from "@/components/HeroSection";
-import { fetchSlides, fetchFeaturedProducts } from "./lib/strapi"; // <-- fetchFeaturedProducts eklendi
+import { fetchSlides, fetchFeaturedProducts } from "./lib/supabase";
 import Link from 'next/link'; // Ürün kartları için Link bileşeni gerekli
 import Image from 'next/image'; // Ürün kartları için Image bileşeni gerekli
 import ValueProps from "@/components/ValueProps";
 
 export default async function HomePage() {
-  
+
   const slides = await fetchSlides();
-  const featuredProducts = await fetchFeaturedProducts(); // <-- Öne çıkan ürünleri çekiyoruz
+  const featuredProducts = await fetchFeaturedProducts();
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeroSection slides={slides} /> {/* HeroSection bileşenini buraya ekle */}
+      <HeroSection slides={slides} />
 
       <ValueProps/>
-      
-      {/* YENİ EKLENECEK KISIM: Öne Çıkan Ürünler Bölümü */}
+
       {featuredProducts.length > 0 && (
-        <section className="container mx-auto px-4 py-12"> {/* py-12 biraz boşluk sağlar */}
+        <section className="container mx-auto px-4 py-12">
           <h2 className="text-4xl md:text-5xl font-extrabold text-red-700 mb-8 text-center">
             En çok tercih edilenler
           </h2>
@@ -28,7 +27,7 @@ export default async function HomePage() {
               <Link href={`/urunler/${product.slug}`} key={product.id} className="block group">
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 duration-300 ease-in-out">
                   <div className="relative w-full h-60">
-                    {product.mainImageUrl ? (
+                    {product.mainImageUrl ? ( // Burada mainImageUrl kullanılıyor
                       <Image
                         src={product.mainImageUrl}
                         alt={product.name}
