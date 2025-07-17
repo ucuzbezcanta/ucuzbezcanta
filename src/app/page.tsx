@@ -1,19 +1,25 @@
 // app/page.tsx
 
 import HeroSection from "@/components/HeroSection";
-import { fetchSlides, fetchFeaturedProducts } from "./lib/supabase";
-import Link from 'next/link'; // Ürün kartları için Link bileşeni gerekli
-import Image from 'next/image'; // Ürün kartları için Image bileşeni gerekli
+// Sadece kullanılan fetch fonksiyonlarını import ediyoruz
+import { fetchSlides, fetchFeaturedProducts } from "./lib/supabase"; // fetchBlogPosts ve fetchCategories kaldırıldı
+import Link from 'next/link';
+import Image from 'next/image';
 import ValueProps from "@/components/ValueProps";
+
+export const revalidate = 60; // 60 saniye (1 dakika)
 
 export default async function HomePage() {
 
   const slides = await fetchSlides();
+  // categories ve blogPosts çekme satırları kaldırıldı, çünkü kullanılmıyorlar
+  // const categories = await fetchCategories();
   const featuredProducts = await fetchFeaturedProducts();
+  // const blogPosts = await fetchBlogPosts();
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeroSection slides={slides} />
+      <HeroSection slides={slides || []} />
 
       <ValueProps/>
 
@@ -27,7 +33,7 @@ export default async function HomePage() {
               <Link href={`/urunler/${product.slug}`} key={product.id} className="block group">
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 duration-300 ease-in-out">
                   <div className="relative w-full h-60">
-                    {product.mainImageUrl ? ( // Burada mainImageUrl kullanılıyor
+                    {product.mainImageUrl ? (
                       <Image
                         src={product.mainImageUrl}
                         alt={product.name}

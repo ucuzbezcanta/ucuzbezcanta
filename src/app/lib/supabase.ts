@@ -14,7 +14,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Supabase Client'ı oluştur
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// BlogPost tipi tanımı (Kategori bilgileri tamamen kaldırıldı)
+// BlogPost tipi tanımı
 interface BlogPost {
     id: number;
     title: string;
@@ -22,16 +22,21 @@ interface BlogPost {
     description: string;
     coverImageUrl: string | null;
     publishedAt: string;
-    content: string; // Blog içeriği için string bekliyoruz
+    content: string;
 }
 
-// Kategori verilerini Supabase'den çekme fonksiyonu (Aynı kalacak)
+// *** REVALIDATE_SECONDS değişkenini siliyoruz, çünkü sayfalarımızda 'export const revalidate' kullanacağız. ***
+// const REVALIDATE_SECONDS = 60; // Bu satırı silin
+
+
+// Kategori verilerini Supabase'den çekme fonksiyonu
 export async function fetchCategories() {
     try {
         const { data, error } = await supabase
             .from('categories')
             .select('*')
-            .order('name', { ascending: true });
+            .order('name', { ascending: true })
+            .limit(100);
 
         if (error) {
             console.error('Kategoriler çekilirken hata oluştu:', error);
@@ -45,13 +50,14 @@ export async function fetchCategories() {
     }
 }
 
-// Slayt verilerini Supabase'den çekme fonksiyonu (Aynı kalacak)
+// Slayt verilerini Supabase'den çekme fonksiyonu
 export async function fetchSlides() {
     try {
         const { data, error } = await supabase
             .from('slides')
             .select('*')
-            .order('order_num', { ascending: true });
+            .order('order_num', { ascending: true })
+            .limit(10);
 
         if (error) {
             console.error('Slaytlar çekilirken hata oluştu:', error);
@@ -73,7 +79,7 @@ export async function fetchSlides() {
     }
 }
 
-// Öne çıkan ürün verilerini Supabase'den çekme fonksiyonu (Aynı kalacak)
+// Öne çıkan ürün verilerini Supabase'den çekme fonksiyonu
 export async function fetchFeaturedProducts() {
     try {
         const { data, error } = await supabase
@@ -96,7 +102,7 @@ export async function fetchFeaturedProducts() {
     }
 }
 
-// Belirli bir kategori slug'ına göre ürünleri çeken fonksiyon (Aynı kalacak, bu ürünler için kategori bağımlılığı devam ediyor)
+// Belirli bir kategori slug'ına göre ürünleri çeken fonksiyon
 export async function fetchProductsByCategorySlug(categorySlug: string) {
     try {
         const { data: categoryData, error: categoryError } = await supabase
@@ -135,7 +141,7 @@ export async function fetchProductsByCategorySlug(categorySlug: string) {
     }
 }
 
-// Tüm ürünleri çeken fonksiyon (Aynı kalacak)
+// Tüm ürünleri çeken fonksiyon
 export async function fetchProducts() {
     try {
         const { data, error } = await supabase
@@ -154,12 +160,12 @@ export async function fetchProducts() {
     }
 }
 
-// Slug'a göre tek bir ürünü çeken fonksiyon (Aynı kalacak, bu ürünler için kategori bağımlılığı devam ediyor)
+// Slug'a göre tek bir ürünü çeken fonksiyon
 export async function fetchProductBySlug(productSlug: string) {
     try {
         const { data: productData, error: productError } = await supabase
             .from('products')
-            .select('*, categories(id, name, slug)') // Ürünler için kategori bağlantısı devam ediyor
+            .select('*, categories(id, name, slug)')
             .eq('slug', productSlug)
             .single();
 
@@ -193,12 +199,12 @@ export async function fetchProductBySlug(productSlug: string) {
     }
 }
 
-// Tüm blog yazılarını Supabase'den çeken fonksiyon (Kategori sorgusu kaldırıldı)
+// Tüm blog yazılarını Supabase'den çeken fonksiyon
 export async function fetchBlogPosts(): Promise<BlogPost[] | null> {
     try {
         const { data, error } = await supabase
             .from('blog_posts')
-            .select('*') // Sadece blog_posts tablosundaki tüm sütunları çek
+            .select('*')
             .order('published_at', { ascending: false });
 
         if (error) {
@@ -228,12 +234,12 @@ export async function fetchBlogPosts(): Promise<BlogPost[] | null> {
     }
 }
 
-// Slug'a göre tek bir blog yazısını Supabase'den çeken fonksiyon (Kategori sorgusu kaldırıldı)
+// Slug'a göre tek bir blog yazısını Supabase'den çeken fonksiyon
 export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null> {
     try {
         const { data: postData, error: postError } = await supabase
             .from('blog_posts')
-            .select('*') // Sadece blog_posts tablosundaki tüm sütunları çek
+            .select('*')
             .eq('slug', slug)
             .single();
 

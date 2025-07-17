@@ -3,13 +3,11 @@
 import { fetchProducts, fetchProductBySlug } from '@/app/lib/supabase';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-// BlocksRenderer artık kullanılmayacak, import'unu kaldırıyoruz
-// import { BlocksRenderer } from '@strapi/blocks-react-renderer';
-import ProductGallery from '@/components/ProductGallery';
-// import Image from 'next/image'; // 'Image' kullanılmadığı için bu import'u kaldırabiliriz
 
-// generateStaticParams: Tüm ürün slug'ları için statik yollar oluşturur
-// Bu fonksiyon, build zamanında hangi ürün detay sayfalarının oluşturulacağını belirler.
+import ProductGallery from '@/components/ProductGallery';
+
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
   const products = await fetchProducts();
   // Eğer ürünler çekilemezse veya boş gelirse boş bir dizi döndürerek hatayı önleriz
@@ -23,17 +21,12 @@ export async function generateStaticParams() {
   }));
 }
 
-// ProductDetailPage: Dinamik bir rota için Server Component
-// params'ı direkt olarak any olarak tanımlayarak tip uyarısını bastırıyoruz.
-// Bu en basit ve direkt çözümdür, ancak tip güvenliğini azaltır.
 export default async function ProductDetailPage({ params }: any) {
-  // URL'den gelen slug parametresini alıyoruz
+
   const { slug } = params;
 
-  // Supabase'den ürün detaylarını çekiyoruz
   const product = await fetchProductBySlug(slug);
 
-  // Eğer ürün bulunamazsa Next.js'in 404 sayfasını gösteriyoruz
   if (!product) {
     notFound();
   }

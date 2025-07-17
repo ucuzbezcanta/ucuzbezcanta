@@ -17,10 +17,10 @@ images: {
         pathname: '**', // Bu domaindeki tüm patikaları içer
       },
       {
-        protocol: 'https', // Canlıda HTTPS kullanıyoruz
-        hostname: 'ucuzbezcanta.onrender.com', // Strapi'nizin ana host adı
-        port: '', // Varsayılan HTTPS portu olduğu için boş bırakabiliriz
-        pathname: '/uploads/**', // Strapi'nin görselleri /uploads altında sunulur
+        protocol: 'https',
+        hostname: 'hpicacbgzxmvvsmwevmc.supabase.co', // <-- Burası sizin Supabase projenizin Storage URL'si olacak
+        port: '',
+        pathname: '/storage/v1/object/public/**',
       },
    
     ],

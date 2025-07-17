@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 // BlocksRenderer import'u kaldırıldı
 // import { BlocksRenderer } from '@strapi/blocks-react-renderer'; // Bu satırı SİLİN
 
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
   const posts = await fetchBlogPosts();
   if (!posts) {
