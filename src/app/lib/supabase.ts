@@ -25,9 +25,6 @@ interface BlogPost {
     content: string;
 }
 
-// *** REVALIDATE_SECONDS değişkenini siliyoruz, çünkü sayfalarımızda 'export const revalidate' kullanacağız. ***
-// const REVALIDATE_SECONDS = 60; // Bu satırı silin
-
 
 // Kategori verilerini Supabase'den çekme fonksiyonu
 export async function fetchCategories() {

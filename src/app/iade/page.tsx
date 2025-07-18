@@ -1,9 +1,9 @@
 // app/iade/page.tsx
-
+  
 import React from 'react';
 
-// Bu sayfa statik olarak oluşturulacak ve otomatik olarak önbelleğe alınacaktır.
-// Sık güncellenmediği için 'revalidate' ayarına gerek yoktur.
+
+export const revalidate = 3600;
 
 const IadePolitikasiPage: React.FC = () => {
   return (

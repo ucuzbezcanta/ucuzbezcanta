@@ -3,6 +3,8 @@
 import React from 'react';
 import AccordionItem from '@/components/AccordionItem';
 
+export const revalidate = 3600;
+
 const SSSPage: React.FC = () => {
   // S.S.S. verilerinizi burada tanımlayabilirsiniz veya Supabase'den çekebilirsiniz
   const faqs = [

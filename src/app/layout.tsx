@@ -27,7 +27,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const categories = await fetchCategories(); // Şimdi 'await' burada sorunsuz kullanılabilir
-
+  
+  
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>

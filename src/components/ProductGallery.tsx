@@ -10,6 +10,8 @@ interface ProductGalleryProps {
   productName: string;
 }
 
+export const revalidate = 3600;
+
 export default function ProductGallery({ mainImageUrl, galleryImageUrls, productName }: ProductGalleryProps) {
   const [currentImage, setCurrentImage] = useState(mainImageUrl);
   const [isModalOpen, setIsModalOpen] = useState(false);

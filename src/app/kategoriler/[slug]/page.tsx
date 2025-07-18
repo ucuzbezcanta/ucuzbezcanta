@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+export const revalidate = 3600;
+
 // generateStaticParams: Tüm kategori slug'ları için statik yollar oluşturur
 export async function generateStaticParams() {
   const categories = await fetchCategories();
