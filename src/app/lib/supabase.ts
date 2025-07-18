@@ -263,4 +263,26 @@ export async function fetchBlogPostBySlug(slug: string): Promise<BlogPost | null
     }
 }
 
+export async function searchProducts(query: string){
+    try {
+        const { data, error} = await supabase
+        .from('products')
+        .select('*')
+        .ilike('name', `%${query}%`);
+
+        if (error) {
+            console.error('Arama sırasında hata oluştu:', error);
+            return[];
+        }
+
+        return data.map(product => ({
+            ...product,
+            mainImageUrl: product.main_image_url,
+        }));
+    } catch (e) {
+        console.error('Arama sırasında beklenmeyen bir hata oluştu', e);
+        return[];
+    }
+}
+
 export default supabase;

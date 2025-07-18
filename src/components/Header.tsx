@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface Category {
   id: number;
@@ -25,6 +26,17 @@ export default function Header({ categories }: HeaderProps) {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const searchInputRef = useRef<HTMLInputElement>(null);
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const router = useRouter();
+
+    const handleSearchSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (searchQuery.trim() !== '') {
+        router.push(`/arama?q=${encodeURIComponent(searchQuery.trim())}`);
+        setIsSearchOpen(false);
+      }
+    };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -241,15 +253,19 @@ return (
                   animate="visible"
                   exit="hidden"
                 >
-                  <input
-                    type="text"
-                    ref={searchInputRef}
-                    placeholder="Ara..."
-                    className="bg-transparent border-b border-blue-500 focus:outline-none text-white placeholder-blue-200 w-full px-2 py-1"
-                  />
-                  <button onClick={toggleSearch} className="ml-2 text-blue-200 hover:text-white focus:outline-none">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                  </button>
+                  <form onSubmit={handleSearchSubmit} className='flex items-center w-full'>
+                    <input
+                      type="text"
+                      ref={searchInputRef}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Ara..."
+                      className="bg-transparent border-b border-blue-500 focus:outline-none text-white placeholder-blue-200 w-full px-2 py-1"
+                    />
+                    <button onClick={toggleSearch} className="ml-2 text-blue-200 hover:text-white focus:outline-none">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                  </form>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -325,15 +341,19 @@ return (
             animate="mobileVisible" // Mobil için farklı animasyon varyantı
             exit="hidden"
           >
+            <form onSubmit={handleSearchSubmit} className='flex items-center w-full'>
             <input
               type="text"
               ref={searchInputRef}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Ara..."
               className="bg-transparent border-b border-blue-500 focus:outline-none text-white placeholder-blue-200 w-full px-2 py-1"
             />
             <button onClick={toggleSearch} className="ml-2 text-blue-200 hover:text-white focus:outline-none">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>

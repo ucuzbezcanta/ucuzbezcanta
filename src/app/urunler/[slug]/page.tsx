@@ -84,7 +84,7 @@ export default async function ProductDetailPage({ params }: any) {
             </p>
           )}
           <p className="text-4xl font-bold text-indigo-700 mb-6">
-            ₺{product.price.toFixed(2)}
+            {product.price.toFixed(2)} ₺ den başlayan fiyatlar
           </p>
           <p className="text-xl text-gray-700 mb-6">
             Stok Durumu: {product.stock > 0 ? `Stokta Var (${product.stock} Adet)` : 'Stokta Yok'}

@@ -6,6 +6,8 @@ import { fetchSlides, fetchFeaturedProducts } from "./lib/supabase"; // fetchBlo
 import Link from 'next/link';
 import Image from 'next/image';
 import ValueProps from "@/components/ValueProps";
+import Intro from "@/components/Intro";
+
 
 export const revalidate = 60; // 60 saniye (1 dakika)
 
@@ -18,7 +20,9 @@ export default async function HomePage() {
   // const blogPosts = await fetchBlogPosts();
 
   return (
+    
     <div className="flex flex-col min-h-screen">
+      <Intro/>
       <HeroSection slides={slides || []} />
 
       <ValueProps/>
@@ -53,7 +57,7 @@ export default async function HomePage() {
                       {product.name}
                     </h3>
                     <p className="text-lg font-bold text-indigo-600 mb-2">
-                      ₺{product.price.toFixed(2)}
+                      {product.price.toFixed(2)} ₺ den başlayan fiyatlar
                     </p>
                     <p className="text-sm text-gray-600">Stok: {product.stock}</p>
                   </div>
