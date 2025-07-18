@@ -182,16 +182,32 @@ export async function fetchProductBySlug(productSlug: string) {
             price: productData.price,
             stock: productData.stock,
             mainImageUrl: productData.main_image_url,
-            galleryImageUrls: productData.gallery_image_urls && typeof productData.gallery_image_urls === 'string'
-                ? JSON.parse(productData.gallery_image_urls) as string[]
-                : Array.isArray(productData.gallery_image_urls)
-                    ? productData.gallery_image_urls as string[]
-                    : [],
+            galleryImageUrls: (() => {
+                const urls = productData.gallery_image_urls;
+
+                if (!urls) return [];
+                if (Array.isArray(urls)) return urls as string[];
+
+                if (typeof urls === 'string') {
+                try {
+                    const parsed = JSON.parse(urls);
+                    if (Array.isArray(parsed)) return parsed as string[];
+                    // Eğer parse edilen şey array değilse ama string URL ise tek elemanlı array yap:
+                    if (typeof parsed === 'string') return [parsed];
+                } catch {
+                    // JSON parse hatası varsa, urls zaten direkt bir string URL'dir
+                    return [urls];
+                }
+                }
+
+                return [];
+            })(),
             categorySlug: productData.categories?.slug,
             categoryName: productData.categories?.name,
-        };
+            };
 
-        return transformedProduct;
+            return transformedProduct;
+
 
     } catch (e) {
         console.error('Ürün slug ile çekilirken beklenmeyen bir hata oluştu:', e);
