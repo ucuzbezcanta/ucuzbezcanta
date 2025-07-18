@@ -14,6 +14,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Supabase Client'ı oluştur
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+
+
+
 // BlogPost tipi tanımı
 interface BlogPost {
     id: number;
@@ -282,6 +285,25 @@ export async function searchProducts(query: string){
     } catch (e) {
         console.error('Arama sırasında beklenmeyen bir hata oluştu', e);
         return[];
+    }
+}
+
+//İletişim formu mesaj kaydetme
+export async function saveContactMessage(name: string, email: string, message:string) {
+    try {
+        const { data, error } = await supabase
+        .from('contact_messages')
+        .insert([{name,email,message}]);
+
+        if (error) {
+            console.error('Mesaj kaydedilirken hata oluştu', error);
+            return {success: false, error};
+        }
+
+        return { success: true, data};
+    } catch (e) {
+        console.error('Mesaj kaydedilirken beklenmeyen bir hata oluştu', e);
+        return { success: false, error: e};
     }
 }
 
