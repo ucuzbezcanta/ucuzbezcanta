@@ -1,6 +1,30 @@
 import React from "react";
 import ContactForm from "@/components/ContactForm";
 import ContactInfo from "@/components/ContactInfo";
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+    title: 'İletişim | Ucuz Bez Çanta',
+    description: 'Ucuz Bez Çanta ile iletişime geçin. İletişim bilgilerimiz, adresimiz ve online iletişim formumuz.',
+    keywords: ['ucuz bez çanta iletişim', 'iletişim bilgileri', 'adres', 'telefon'],
+    openGraph: {
+      title: 'İletişim | Ucuz Bez Çanta',
+      description: 'Ucuz Bez Çanta ile iletişime geçin. İletişim bilgilerimiz, adresimiz ve online iletişim formumuz.',
+      url: 'https://www.ucuzbezcanta.com/iletisim',
+      siteName: 'Ucuz Bez Çanta',
+      images: [
+        {
+          url: 'https://ucuzbezcanta.com/images/logo.png',
+          width: 1200,
+          height: 630,
+          alt: 'Ucuz bez çanta Logo Ana Görsel',
+        },
+      ],
+      locale: 'tr_TR',
+      type: 'website',
+    },
+};
 
 export default function IletisimPage() {
   return (

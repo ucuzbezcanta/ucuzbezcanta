@@ -3,9 +3,28 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
+
+
 export const metadata: Metadata = {
-  title: "Arama sonuçları",
-  description: "Arama sonuçları sayfası",
+    title: 'Arama Sayfası | Ucuz Bez Çanta', // Sayfanın içeriğine özel başlık
+    description: 'Ucuz Bez Çanta hakkında bilgi edinin. Misyonumuz, vizyonumuz ve toptan bez çanta üretimindeki uzmanlığımız hakkında detaylı bilgi.', // Sayfanın içeriğine özel açıklama
+    keywords: ['ucuz bez çanta hakkında', 'bez çanta misyonu', 'bez çanta vizyonu', 'şirket bilgileri'], // Sayfaya özel anahtar kelimeler
+    openGraph: {
+      title: 'Arama Sayfası | Ucuz Bez Çanta',
+      description: 'Ucuz Bez Çanta hakkında bilgi edinin. Misyonumuz, vizyonumuz ve toptan bez çanta üretimindeki uzmanlığımız hakkında detaylı bilgi.',
+      url: 'https://www.ucuzbezcanta.com/arama', // Bu sayfanın URL'si
+      siteName: 'Ucuz Bez Çanta',
+      images: [
+        {
+          url: 'https://ucuzbezcanta.com/images/logo.png',
+          width: 1200,
+          height: 630,
+          alt: 'Ucuz bez çanta Logo Ana Görsel',
+        },
+      ],
+      locale: 'tr_TR',
+      type: 'website',
+    },
 };
 
 export default async function SearchPage(props: any) {

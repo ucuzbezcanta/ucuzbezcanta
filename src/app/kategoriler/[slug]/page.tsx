@@ -15,6 +15,48 @@ export async function generateStaticParams() {
 }
 
 
+/**
+ * Dinamik SEO Metadata
+ */
+export async function generateMetadata({ params }: any) {
+  const { slug } = params;
+  const products = await fetchProductsByCategorySlug(slug);
+
+  if (!products || products.length === 0) {
+    return {
+      title: 'Kategori Bulunamadı | Ucuz Bez Çanta',
+      description: 'Aradığınız kategori bulunamadı.',
+    };
+  }
+
+  const categoryName = products[0].categoryName;
+
+  return {
+    title: `${categoryName} Ürünleri | Ucuz Bez Çanta`,
+    description: `${categoryName} kategorisindeki ürünleri ve fiyatları hemen inceleyin.`,
+    openGraph: {
+      title: `${categoryName} Ürünleri | Ucuz Bez Çanta`,
+      description: `${categoryName} kategorisindeki ürünleri ve fiyatları hemen inceleyin.`,
+      images: [
+        {
+          url: products[0].mainImageUrl || '/images/logo.png',
+          width: 1200,
+          height: 630,
+          alt: categoryName,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${categoryName} Ürünleri | Ucuz Bez Çanta`,
+      description: `${categoryName} kategorisindeki ürünleri ve fiyatları hemen inceleyin.`,
+      images: [products[0].mainImageUrl || '/images/logo.png'],
+    },
+  };
+}
+
+
+
 export default async function CategoryPage({ params }: { params: any}) {
   const { slug } = params;
   // Belirli bir kategoriye ait ürünleri çekiyoruz

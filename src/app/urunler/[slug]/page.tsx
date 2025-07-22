@@ -6,7 +6,49 @@ import { notFound } from 'next/navigation';
 
 import ProductGallery from '@/components/ProductGallery';
 
+
 export const revalidate = 3600;
+
+
+export async function generateMetadata({ params }: any) {
+  const product = await fetchProductBySlug(params.slug);
+
+  if (!product) {
+    return {
+      title: 'Ürün Bulunamadı | Ucuz Bez Çanta',
+      description: 'Aradığınız ürün bulunamadı.',
+    };
+  }
+
+  const description =
+    product.description?.slice(0, 150) ||
+    `${product.name} hakkında detaylı bilgi ve fiyatlar için hemen inceleyin.`;
+
+  return {
+    title: `${product.name} | Ucuz Bez Çanta`,
+    description: description,
+    openGraph: {
+      title: `${product.name} | Ucuz Bez Çanta`,
+      description: description,
+      images: [
+        {
+          url: product.mainImageUrl || '/images/logo.png',
+          width: 1200,
+          height: 630,
+          alt: product.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${product.name} | Ucuz Bez Çanta`,
+      description: description,
+      images: [product.mainImageUrl || '/images/logo.png'],
+    },
+  };
+}
+
+
 
 export async function generateStaticParams() {
   const products = await fetchProducts();

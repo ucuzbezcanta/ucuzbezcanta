@@ -1,5 +1,30 @@
 import React from "react";
 import Image from "next/image";
+import { Metadata } from "next";
+
+
+
+export const metadata: Metadata = {
+    title: 'Hakkımızda | Ucuz Bez Çanta', // Sayfanın içeriğine özel başlık
+    description: 'Ucuz Bez Çanta hakkında bilgi edinin. Misyonumuz, vizyonumuz ve toptan bez çanta üretimindeki uzmanlığımız hakkında detaylı bilgi.', // Sayfanın içeriğine özel açıklama
+    keywords: ['ucuz bez çanta hakkında', 'bez çanta misyonu', 'bez çanta vizyonu', 'şirket bilgileri'], // Sayfaya özel anahtar kelimeler
+    openGraph: {
+      title: 'Hakkımızda | Ucuz Bez Çanta',
+      description: 'Ucuz Bez Çanta hakkında bilgi edinin. Misyonumuz, vizyonumuz ve toptan bez çanta üretimindeki uzmanlığımız hakkında detaylı bilgi.',
+      url: 'https://www.ucuzbezcanta.com/hakkimizda', // Bu sayfanın URL'si
+      siteName: 'Ucuz Bez Çanta',
+      images: [
+        {
+          url: 'https://ucuzbezcanta.com/images/logo.png',
+          width: 1200,
+          height: 630,
+          alt: 'Ucuz bez çanta Logo Ana Görsel',
+        },
+      ],
+      locale: 'tr_TR',
+      type: 'article',
+    },
+};
 
 const AboutPage:React.FC = () => {
     return(

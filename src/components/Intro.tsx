@@ -10,7 +10,7 @@ export default function Intro() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowIntro(false);
-    }, 3000); // 3 saniye sonra intro kapanır
+    }, 2000); // 3 saniye sonra intro kapanır
 
     return () => clearTimeout(timer);
   }, []);

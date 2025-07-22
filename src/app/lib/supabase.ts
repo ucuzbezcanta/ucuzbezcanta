@@ -86,7 +86,7 @@ export async function fetchFeaturedProducts() {
             .from('products')
             .select('*')
             .eq('is_featured', true)
-            .limit(4);
+            .limit(12);
 
         if (error) {
             console.error('Öne çıkan ürünler çekilirken hata oluştu:', error);
@@ -321,6 +321,44 @@ export async function saveContactMessage(name: string, email: string, message:st
         console.error('Mesaj kaydedilirken beklenmeyen bir hata oluştu', e);
         return { success: false, error: e};
     }
+}
+
+
+// YENİ: Newsletter abonesi kaydetme fonksiyonu
+export async function saveNewsletterSubscriber(email: string) {
+  try {
+    // E-posta adresinin zaten var olup olmadığını kontrol et
+    const { data: existingSubscriber, error: fetchError } = await supabase
+      .from('newsletter_subscribers') // Supabase'de oluşturduğunuz yeni tablonun adı
+      .select('id')
+      .eq('email', email)
+      .single();
+
+    // Satır bulunamadı hatası (yani e-posta daha önce kaydedilmemiş) haricindeki hataları yakala
+    if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = Satır bulunamadı (no rows found)
+      console.error('Abone kontrol edilirken hata oluştu:', fetchError);
+      return { success: false, error: fetchError, message: 'Abone kontrol edilirken bir sorun oluştu.' };
+    }
+
+    if (existingSubscriber) {
+      // E-posta zaten varsa
+      return { success: false, message: 'Bu e-posta adresi zaten abone.' };
+    }
+
+    // E-posta adresini yeni tabloya kaydet
+    const { data, error } = await supabase
+      .from('newsletter_subscribers') // Supabase'de oluşturduğunuz yeni tablonun adı
+      .insert([{ email }]);
+
+    if (error) {
+      console.error('Newsletter abonesi kaydederken hata oluştu:', error);
+      return { success: false, error, message: 'Abone olunurken bir hata oluştu, lütfen tekrar deneyin.' };
+    }
+    return { success: true, data, message: 'Abone oldunuz, teşekkür ederiz!' };
+  } catch (err) {
+    console.error('Beklenmedik hata:', err);
+    return { success: false, error: err, message: 'Beklenmeyen bir hata oluştu, lütfen tekrar deneyin.' };
+  }
 }
 
 export default supabase;

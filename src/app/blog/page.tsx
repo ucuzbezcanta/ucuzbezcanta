@@ -3,7 +3,31 @@
 import { fetchBlogPosts } from '../lib/supabase';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Metadata } from 'next';
 
+
+
+export const metadata: Metadata = {
+    title: 'Blog | Ucuz Bez Çanta Haberleri ve İpuçları',
+    description: 'Ucuz Bez Çanta blogunda en son bez çanta modelleri, kullanım ipuçları, sektör haberleri ve çevre dostu üretim süreçleri hakkında bilgilere ulaşın.',
+    keywords: ['bez çanta blog', 'çanta haberleri', 'promosyon ürünleri ipuçları', 'çevre dostu üretim', 'bez çanta trendleri'],
+    openGraph: {
+      title: 'Blog | Ucuz Bez Çanta Haberleri ve İpuçları',
+      description: 'Ucuz Bez Çanta blogunda en son bez çanta modelleri, kullanım ipuçları, sektör haberleri ve çevre dostu üretim süreçleri hakkında bilgilere ulaşın.',
+      url: 'https://www.ucuzbezcanta.com/blog', // Blog sayfanızın URL'si
+      siteName: 'Ucuz Bez Çanta',
+      images: [
+        {
+          url: 'https://ucuzbezcanta.com/images/logo.png',
+          width: 1200,
+          height: 630,
+          alt: 'Ucuz bez çanta Logo Ana Görsel',
+        },
+      ],
+      locale: 'tr_TR',
+      type: 'article',
+    },
+};
 
 export const revalidate = 300;
 
