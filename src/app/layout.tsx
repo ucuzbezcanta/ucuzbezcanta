@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import { fetchCategories } from "./lib/supabase";
 import TopHeader from "@/components/TopHeader";
 import Script from "next/script";
+import CookieConsentBanner from "@/components/CookieConsentBanner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,7 +52,7 @@ export default async function RootLayout({
         <Header categories={categories}/>
         {children}
         <Footer/>
-        
+        <CookieConsentBanner/>
       </body>
     </html>
   );
