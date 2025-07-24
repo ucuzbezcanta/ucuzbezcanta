@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { fetchCategories } from "./lib/supabase";
 import TopHeader from "@/components/TopHeader";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +33,25 @@ export default async function RootLayout({
   
   return (
     <html lang="en">
+      <head>
+        {/* Google Analytics Script */}
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-280576298"></Script>
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-280576298');
+          `}
+        </Script>
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+
         <TopHeader/>
         <Header categories={categories}/>
         {children}
         <Footer/>
+        
       </body>
     </html>
   );
